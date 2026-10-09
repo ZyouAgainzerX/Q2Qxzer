@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Token Address</title>
+  <link rel="stylesheet" href="style1.css" />
+</head>
+
+<body>
+  <video
+    id="background-video"
+    class="background-video"
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src="xzer3.MOV" type="video/quicktime" />
+    Your browser does not support HTML5 video.
+  </video>
+
+  <div class="page-overlay" aria-hidden="true"></div>
+
+  <header>
+    <h1 class="vibrant-link">
+      <span class="curved-text">Token Address</span>
+    </h1>
+  </header>
+
+  <main class="narrow">
+    <section class="token-box" aria-labelledby="welcome-heading">
+      <h2 id="welcome-heading">Welcome to join our star</h2>
+
+      <p class="token-label">
+        Just copy, paste, and do your way to our way
+      </p>
+
+      <div class="token-address" id="tokenAddress">
+        YOUR_TOKEN_ADDRESS_HERE
+      </div>
+
+      <button id="copyButton" type="button">
+        Copy address
+      </button>
+
+      <span id="copyStatus" class="copy-status" aria-live="polite"></span>
+    </section>
+
+    <p class="vibrant-foot">
+      <span class="curved-text">
+        Any price is part of something bigger, like a star among shattered space rocks.
+      </span>
+    </p>
+  </main>
+
+  <footer class="vibrant-foot">
+    <span class="curved-text">Let the process begin today with your funds</span>
+  </footer>
+
+  <script>
+    const video = document.getElementById("background-video");
+    const copyButton = document.getElementById("copyButton");
+    const tokenAddress = document.getElementById("tokenAddress");
+    const copyStatus = document.getElementById("copyStatus");
+
+    // Browsers generally block autoplay with sound, so the video starts muted.
+    video.volume = 0.7;
+
+    // Try to enable sound after the visitor interacts with the page.
+    document.addEventListener(
+      "pointerdown",
+      async () => {
+        video.muted = false;
+
+        try {
+          await video.play();
+        } catch (error) {
+          console.warn("Video playback with sound was blocked:", error);
+        }
+      },
+      { once: true }
+    );
+
+    copyButton.addEventListener("click", async () => {
+      const address = tokenAddress.textContent.trim();
+
+      try {
+        await navigator.clipboard.writeText(address);
+        copyStatus.textContent = "Address copied";
+      } catch (error) {
+        copyStatus.textContent = "Could not copy. Please copy the address manually.";
+      }
+    });
+  </script>
+</body>
+</html>
