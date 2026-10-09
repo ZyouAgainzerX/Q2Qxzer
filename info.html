@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Token Address</title>
+  <title>Welcome to join our star</title>
   <link rel="stylesheet" href="style1.css" />
 </head>
 
@@ -26,32 +26,16 @@
 
   <header>
     <h1 class="vibrant-link">
-      <span class="curved-text">Token Address</span>
+      <span class="curved-text">Welcome to join our star</span>
     </h1>
   </header>
 
   <main class="narrow">
-    <section class="token-box" aria-labelledby="welcome-heading">
-      <h2 id="welcome-heading">Welcome to join our star</h2>
-
-      <p class="token-label">
-        Just copy, paste, and do your way to our way
-      </p>
-
-      <div class="token-address" id="tokenAddress">
-        ...
-      </div>
-
-      <button id="copyButton" type="button">
-        Copy address
-      </button>
-
-      <span id="copyStatus" class="copy-status" aria-live="polite"></span>
-    </section>
 
     <p class="vibrant-foot">
       <span class="curved-text">
-        Any price is part of something bigger, like a star among shattered space rocks.
+       <a href="index1.html">
+        Any price is part of something bigger, like a star among shattered space rocks. </a>
       </span>
     </p>
   </main>
@@ -62,9 +46,7 @@
 
   <script>
     const video = document.getElementById("background-video");
-    const copyButton = document.getElementById("copyButton");
     const tokenAddress = document.getElementById("tokenAddress");
-    const copyStatus = document.getElementById("copyStatus");
 
     // Browsers generally block autoplay with sound, so the video starts muted.
     video.volume = 0.7;
@@ -83,18 +65,6 @@
       },
       { once: true }
     );
-
-    copyButton.addEventListener("click", async () => {
-      const address = tokenAddress.textContent.trim();
-
-      try {
-        await navigator.clipboard.writeText(address);
-        copyStatus.textContent = "Address copied";
-      } catch (error) {
-        copyStatus.textContent = "Could not copy. Please copy the address manually.";
-      }
-    });
   </script>
-  <script src="https://vhtgsqrhaiulljbeyjfx.supabase.co/storage/v1/object/public/Ctokenhere/token_address.js"></script>
 </body>
 </html>
