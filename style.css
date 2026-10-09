@@ -1,0 +1,418 @@
+/* =========================
+   Team App - Dark Sci-Fi UI
+   ========================= */
+
+/* ---- Variables ---- */
+:root {
+  /* Use a rounder, softer font stack */
+  --font:
+    "Varela Round",
+    "Quicksand",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  --text: #e0e0ec;
+  --primary: #00f0ff;
+  --primary-dark: #0080ff;
+  --background: #05050a;
+}
+
+/* ---- Reset ---- */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  isolation: isolate;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+/* ---- Full-screen background video ---- */
+.background-video {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  background: var(--background);
+  pointer-events: none;
+}
+
+/* ---- Video readability overlay ---- */
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(5, 5, 10, 0.25),
+      rgba(5, 5, 10, 0.42)
+    ),
+    radial-gradient(
+      circle at center,
+      rgba(0, 240, 255, 0.06),
+      transparent 65%
+    );
+
+  pointer-events: none;
+}
+
+/* ---- Content ---- */
+.narrow {
+  position: relative;
+  z-index: 1;
+
+  width: min(900px, calc(100% - 2rem));
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  position: fix;
+  top: -200px;
+}
+h2 { 
+  position: fix;
+  bottom: -200px;
+}
+/* ---- Vibrant colorful vibrating link ---- */
+.vibrant-link {
+  position: relative;
+  display: inline-block;
+
+  margin: 0 auto;
+  padding: 0;
+
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  text-align: center;
+}
+
+/* The actual link text */
+.vibrant-link a,
+.vibrant-link a:link,
+.vibrant-link a:visited,
+.vibrant-link a:hover,
+.vibrant-link a:active,
+.vibrant-link a:focus {
+  display: inline-block;
+
+  text-decoration: none;
+
+  /* Vibrant rainbow gradient on the text */
+  background: linear-gradient(
+    90deg,
+    #ff0000 0%,
+    #ff8800 12%,
+    #ffdd00 24%,
+    #00ff66 36%,
+    #00f0ff 48%,
+    #0066ff 60%,
+    #aa00ff 72%,
+    #ff0088 84%,
+    #ff0000 100%
+  );
+
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  /* Semi-transparent, vibrant text */
+  color: rgba(255, 255, 255, 0.9);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.9);
+
+  /* Soften edges: subtle stroke + blur */
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.35);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.25));
+
+  /* Animations: vibration + moving glow + hue spin */
+  animation:
+    link-vibrate-strong 0.14s steps(2, end) infinite,
+    wave-glow-lr-rl 5s ease-in-out infinite,
+    hue-spin 10s linear infinite;
+
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* Optional: stronger on hover */
+.vibrant-link a:hover {
+  filter: brightness(1.3) saturate(1.4);
+  transform: scale(1.03);
+}
+
+/* Curved, vibrant, semi-transparent text with rounded edges */
+.curved-text {
+  display: inline-block;
+
+  color: inherit;
+  -webkit-text-fill-color: inherit;
+  -webkit-text-stroke: inherit;
+
+  /* Curve the text into an arch */
+  transform: perspective(600px) rotateX(10deg);
+  letter-spacing: 0.12em;
+}
+
+/* Stronger but smooth vibration */
+@keyframes link-vibrate-strong {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(-1px, 0.7px) rotate(-0.3deg);
+  }
+  40% {
+    transform: translate(1px, -0.7px) rotate(0.3deg);
+  }
+  60% {
+    transform: translate(-0.8px, -0.8px) rotate(-0.25deg);
+  }
+  80% {
+    transform: translate(0.8px, 0.8px) rotate(0.25deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/*
+  Smooth wave glow:
+  - 0%   : glow on left
+  - 50%  : glow on right
+  - 100% : glow back on left
+*/
+@keyframes wave-glow-lr-rl {
+  0% {
+    text-shadow:
+      -24px 0 22px rgba(255, 0, 0, 0.0),
+      -10px 0 16px rgba(255, 0, 0, 0.9),
+      0 0 14px rgba(255, 0, 0, 1),
+      14px 0 8px rgba(255, 0, 0, 0.3);
+
+    filter: brightness(1) saturate(1);
+  }
+
+  25% {
+    text-shadow:
+      -12px 0 10px rgba(255, 170, 0, 0.2),
+      -4px 0 14px rgba(255, 170, 0, 0.95),
+      0 0 18px rgba(255, 170, 0, 1),
+      8px 0 12px rgba(255, 170, 0, 0.5);
+
+    filter: brightness(1.15) saturate(1.25);
+  }
+
+  50% {
+    text-shadow:
+      -14px 0 8px rgba(0, 255, 100, 0.3),
+      -8px 0 12px rgba(0, 255, 100, 0.95),
+      0 0 18px rgba(0, 255, 100, 1),
+      10px 0 14px rgba(0, 255, 100, 0.5),
+      24px 0 22px rgba(0, 255, 100, 0.0);
+
+    filter: brightness(1.25) saturate(1.4);
+  }
+
+  75% {
+    text-shadow:
+      -8px 0 12px rgba(0, 150, 255, 0.5),
+      -4px 0 14px rgba(0, 150, 255, 0.95),
+      0 0 18px rgba(0, 150, 255, 1),
+      12px 0 10px rgba(0, 150, 255, 0.2);
+
+    filter: brightness(1.15) saturate(1.25);
+  }
+
+  100% {
+    text-shadow:
+      -24px 0 22px rgba(200, 0, 255, 0.0),
+      -10px 0 16px rgba(200, 0, 255, 0.9),
+      0 0 14px rgba(200, 0, 255, 1),
+      14px 0 8px rgba(200, 0, 255, 0.3);
+
+    filter: brightness(1) saturate(1);
+  }
+}
+
+/* Continuous hue rotation to sweep through all colors */
+@keyframes hue-spin {
+  0% {
+    filter: hue-rotate(0deg) brightness(1) saturate(1);
+  }
+  100% {
+    filter: hue-rotate(360deg) brightness(1) saturate(1);
+  }
+}
+
+/* ---- Vibrant foot text (same style, smaller) ---- */
+.vibrant-foot {
+  position: relative;
+  display: inline-block;
+
+  margin: 1.5rem auto 0;
+  padding: 0;
+
+  font-size: clamp(1rem, 4vw, 1.6rem); /* smaller than H1 */
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  text-align: center;
+}
+
+/* The actual link/text inside foot */
+.vibrant-foot a,
+.vibrant-foot a:link,
+.vibrant-foot a:visited,
+.vibrant-foot a:hover,
+.vibrant-foot a:active,
+.vibrant-foot a:focus {
+  display: inline-block;
+
+  text-decoration: none;
+
+  /* Same rainbow gradient as H1 */
+  background: linear-gradient(
+    90deg,
+    #ff0000 0%,
+    #ff8800 12%,
+    #ffdd00 24%,
+    #00ff66 36%,
+    #00f0ff 48%,
+    #0066ff 60%,
+    #aa00ff 72%,
+    #ff0088 84%,
+    #ff0000 100%
+  );
+
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: rgba(255, 255, 255, 0.9);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.9);
+
+  -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.35);
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.25));
+
+  /* Same animations, slightly softer vibration for smaller text */
+  animation:
+    link-vibrate-soft 0.18s steps(2, end) infinite,
+    wave-glow-lr-rl 5s ease-in-out infinite,
+    hue-spin 10s linear infinite;
+
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* Optional hover for foot */
+.vibrant-foot a:hover {
+  filter: brightness(1.25) saturate(1.3);
+  transform: scale(1.02);
+}
+
+/* Slightly softer vibration for smaller text */
+@keyframes link-vibrate-soft {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(-0.7px, 0.5px) rotate(-0.25deg);
+  }
+  40% {
+    transform: translate(0.7px, -0.5px) rotate(0.25deg);
+  }
+  60% {
+    transform: translate(-0.6px, -0.6px) rotate(-0.2deg);
+  }
+  80% {
+    transform: translate(0.6px, 0.6px) rotate(0.2deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* Curved variant for foot text (optional) */
+.vibrant-foot .curved-text {
+  display: inline-block;
+  transform: perspective(600px) rotateX(8deg);
+  letter-spacing: 0.12em;
+}
+
+/* ---- Mobile layout ---- */
+@media (max-width: 620px) {
+  .narrow {
+    width: calc(100% - 1.5rem);
+  }
+
+  .vibrant-link {
+    font-size: clamp(2.3rem, 18vw, 4rem);
+  }
+
+  .curved-text {
+    letter-spacing: 0.08em;
+  }
+
+  .vibrant-foot {
+    font-size: clamp(0.9rem, 5vw, 1.4rem);
+  }
+
+  .vibrant-foot .curved-text {
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ---- Accessibility: reduce motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .vibrant-link,
+  .vibrant-link a,
+  .vibrant-foot,
+  .vibrant-foot a,
+  .curved-text {
+    animation: none;
+    filter: none;
+    transition: none;
+  }
+}

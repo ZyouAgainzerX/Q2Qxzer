@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Quantity to Quality</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Full-screen background video -->
+  <video
+    id="background-video"
+    class="background-video"
+    autoplay
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src="exzer1.mp4" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+
+<audio id="music" autoplay loop>
+  <source src="babayatu.mp3" type="audio/mpeg">
+</audio>
+
+  <!-- Dark overlay for readability -->
+  <div class="page-overlay" aria-hidden="true"></div>
+
+  <main class="narrow">
+    <h1 class="vibrant-link">
+      <a href="#">
+        <span class="curved-text">Quantity to Quality</span>
+      </a>
+    </h1>
+ <h2 class="vibrant-foot">
+      <a href="#">
+        <span class="curved-text">From shatterd pieces to a shiny star</span>
+      </a>
+    </h2>
+  </main>
+
+  <script>
+    const video = document.getElementById("background-video");
+
+    // Set the desired volume.
+    video.volume = 0.7;
+
+    // Try to start the video with sound.
+    async function startVideoWithSound() {
+      video.muted = false;
+
+      try {
+        await video.play();
+      } catch (error) {
+        /*
+          Browsers may block audible autoplay.
+          The first user interaction will try again.
+        */
+        console.warn("Autoplay with sound was blocked:", error);
+      }
+    }
+
+    // Try immediately when the page loads.
+    window.addEventListener("load", startVideoWithSound);
+
+    // Fallback for browsers requiring user interaction.
+    document.addEventListener(
+      "pointerdown",
+      async () => {
+        video.muted = false;
+        video.volume = 0.7;
+
+        try {
+          await video.play();
+        } catch (error) {
+          console.error("Video playback failed:", error);
+        }
+      },
+      { once: true }
+    );
+  </script>
+   <script>
+  const music = document.getElementById("music");
+
+  document.addEventListener("click", () => {
+    music.play().catch(error => {
+      console.log("Playback was blocked:", error);
+    });
+  }, { once: true });
+</script>
+</body>
+</html>
