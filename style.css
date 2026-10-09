@@ -79,7 +79,7 @@ body {
     radial-gradient(
       circle at center,
       rgba(0, 240, 255, 0.06),
-      transparent 65%
+      transparent 100%
     );
 
   pointer-events: none;
