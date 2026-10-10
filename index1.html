@@ -87,10 +87,18 @@
           }
         );
 
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        }
+
         const result = await response.json();
 
         tokenAddress.textContent =
-          result.length > 0 ? result[0].token_address : "Not yet.....";
+          result.length > 0 && result[0].token_address
+            ? result[0].token_address
+            : "Not yet.....";
+
+        console.log("Loaded token address:", result);
       } catch (error) {
         console.error("Could not load token address:", error);
         tokenAddress.textContent = "Not yet.....";
@@ -98,6 +106,10 @@
     }
 
     function connectRealtime() {
+      if (adminChannel) {
+        supabase.removeChannel(adminChannel);
+      }
+
       adminChannel = supabase.channel(CHANNEL_NAME, {
         config: {
           private: true
@@ -105,14 +117,28 @@
       });
 
       adminChannel
+        .on("broadcast", { event: "*" }, ({ event, payload }) => {
+          console.log("ANY broadcast received:", event, payload);
+        })
         .on("broadcast", { event: EVENT_NAME }, ({ payload }) => {
+          console.log("Token update received:", payload);
+
           if (payload?.token_address) {
             tokenAddress.textContent = payload.token_address;
           }
         })
-        .subscribe((status) => {
+        .subscribe((status, err) => {
+          console.log("Info channel status:", status, err);
+
           if (status === "SUBSCRIBED") {
             statusText.textContent = "Live updates connected.";
+          } else if (status === "CHANNEL_ERROR") {
+            statusText.textContent =
+              "Channel error. Check that you are logged in and RLS allows receiving.";
+          } else if (status === "TIMED_OUT") {
+            statusText.textContent = "Connection timed out.";
+          } else if (status === "CLOSED") {
+            statusText.textContent = "Connection closed.";
           } else {
             statusText.textContent = "Channel status: " + status;
           }
@@ -128,6 +154,7 @@
       });
 
       if (error) {
+        console.error("Login failed:", error);
         statusText.textContent = "Login failed: " + error.message;
         return;
       }
@@ -141,14 +168,18 @@
 
       if (!address || address === "Not yet.....") return;
 
-      await navigator.clipboard.writeText(address);
+      try {
+        await navigator.clipboard.writeText(address);
 
-      const originalText = copyButton.textContent;
-      copyButton.textContent = "Copied!";
+        const originalText = copyButton.textContent;
+        copyButton.textContent = "Copied!";
 
-      setTimeout(() => {
-        copyButton.textContent = originalText;
-      }, 1500);
+        setTimeout(() => {
+          copyButton.textContent = originalText;
+        }, 1500);
+      } catch (error) {
+        console.error("Could not copy address:", error);
+      }
     });
 
     loadTokenAddress();
