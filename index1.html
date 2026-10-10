@@ -54,14 +54,13 @@
 
   <p id="status">Not connected.</p>
 
-  <script type="module">
+    <script type="module">
     import { createClient } from
       'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
     const SUPABASE_URL = "https://vhtgsqrhaiulljbeyjfx.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_8RswDzXEeRBq418YPrhfXw_gB6IM0K1";
 
-    const CHANNEL_NAME = "admin-announcements";
     const EVENT_NAME = "token-address-updated";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -73,7 +72,7 @@
     const loginButton = document.getElementById("loginButton");
     const statusText = document.getElementById("status");
 
-    let adminChannel = null;
+    let userChannel = null;
 
     async function loadTokenAddress() {
       try {
@@ -105,18 +104,33 @@
       }
     }
 
-    function connectRealtime() {
-      if (adminChannel) {
-        supabase.removeChannel(adminChannel);
+    async function connectRealtime() {
+      const { data: { user }, error: userError } =
+        await supabase.auth.getUser();
+
+      if (userError || !user) {
+        console.error("Could not identify user:", userError);
+        statusText.textContent = "Could not identify logged-in user.";
+        return;
       }
 
-      adminChannel = supabase.channel(CHANNEL_NAME, {
+      // This must match the admin page:
+      // user:${selectedUserId}:updates
+      const channelName = `user:${user.id}:updates`;
+
+      console.log("Connecting to user channel:", channelName);
+
+      if (userChannel) {
+        await supabase.removeChannel(userChannel);
+      }
+
+      userChannel = supabase.channel(channelName, {
         config: {
           private: true
         }
       });
 
-      adminChannel
+      userChannel
         .on("broadcast", { event: "*" }, ({ event, payload }) => {
           console.log("ANY broadcast received:", event, payload);
         })
@@ -128,13 +142,13 @@
           }
         })
         .subscribe((status, err) => {
-          console.log("Info channel status:", status, err);
+          console.log("User channel status:", status, err);
 
           if (status === "SUBSCRIBED") {
             statusText.textContent = "Live updates connected.";
           } else if (status === "CHANNEL_ERROR") {
             statusText.textContent =
-              "Channel error. Check that you are logged in and RLS allows receiving.";
+              "Channel error. Check login and RLS receive policy.";
           } else if (status === "TIMED_OUT") {
             statusText.textContent = "Connection timed out.";
           } else if (status === "CLOSED") {
@@ -160,7 +174,8 @@
       }
 
       statusText.textContent = "Logged in. Connecting…";
-      connectRealtime();
+
+      await connectRealtime();
     });
 
     copyButton.addEventListener("click", async () => {
